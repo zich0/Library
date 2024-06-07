@@ -1,0 +1,15 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+    {% if object %}Edit Author{% else %}Add Author{% endif %}
+{% endblock %}
+
+{% block content %}
+    <h1>{% if object %}Edit Author{% else %}Add Author{% endif %}</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="{% url 'books:author_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+{% endblock %}

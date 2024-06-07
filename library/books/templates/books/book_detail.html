@@ -1,0 +1,18 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Book Detail{% endblock %}
+
+{% block content %}
+    <h1>{{ book.title }}</h1>
+    {% if book.cover_image %}
+    <img src="{{ book.cover_image.url }}" class="img-fluid shadow-lg mb-3 bg-body-tertiary rounded" style="max-width: 200px;">
+    {% else %}
+    <p>No cover image available.</p>
+    {% endif %}
+        <p><strong>Автор:</strong> {{ book.author }}</p>
+        <p><strong>Жанр:</strong> {{ book.genre }}</p>
+        <p><strong>Год создания:</strong> {{ book.year_published }}</p>
+        <p><strong>Описание:</strong> {{ book.description }}</p>
+
+    <a href="{% url 'books:book_list' %}" class="btn btn-secondary">Обратно к списку</a>
+{% endblock %}

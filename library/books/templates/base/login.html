@@ -1,0 +1,14 @@
+
+{%load crispy_forms_tags %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<div class="parent">
+    <div class="container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)">
+        <h1>Вход</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {% crispy form %}
+            <p>Нет аккаунта? <a href="{% url 'books:signup' %}">Создайте</a></p>
+            <a href="{% url 'books:book_list' %}">На главную</a>
+        </form>
+    </div>
+</div>

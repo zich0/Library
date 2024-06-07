@@ -1,0 +1,32 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Book Catalog{% endblock %}
+
+{% block content %}
+    <h1>Book Catalog</h1>
+    <a href="{% url 'books:author_add' %}" class="btn btn-primary">Add author</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Bio</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for author in author_list %}
+            <tr>
+
+                <td>{{ author.name }}</td>
+                <td>{{ author.bio }}</td>
+                <td>
+                    <a href="{% url 'books:author_detail' author.id %}" class="btn btn-info">View</a>
+                    <a href="{% url 'books:book_update' author.id %}" class="btn btn-warning">Edit</a>
+                    <a href="{% url 'books:book_delete' author.id %}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

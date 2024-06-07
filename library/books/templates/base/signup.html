@@ -1,0 +1,12 @@
+{%load crispy_forms_tags %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<div class="parent">
+    <div class="container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)">
+        <h1>Регистрация</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {% crispy form %}
+            <a href="{% url 'books:login' %}">Уже есть аккаунт?</a>
+        </form>
+    </div>
+</div>

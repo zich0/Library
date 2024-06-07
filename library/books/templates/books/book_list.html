@@ -1,0 +1,72 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Book Catalog{% endblock %}
+
+{% block content %}
+    <h1 align>Список книг</h1>
+    {% if is_admin %}
+    <a href="{% url 'books:book_add' %}" class="btn btn-primary mb-1">Добавить</a>
+    {% endif %}
+
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            Сортировать
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+            <li><a class="dropdown-item sort-link" href="#" data-sort-by="title" data-order="asc">Название (А-Я)</a></li>
+            <li><a class="dropdown-item sort-link" href="#" data-sort-by="title" data-order="desc">Название (Я-А)</a></li>
+            <li><a class="dropdown-item sort-link" href="#" data-sort-by="author" data-order="asc">Автор (А-Я)</a></li>
+            <li><a class="dropdown-item sort-link" href="#" data-sort-by="author" data-order="desc">Автор (Я-А)</a></li>
+            <li><a class="dropdown-item sort-link" href="#" data-sort-by="year_published" data-order="asc">Год (от старых к новым)</a></li>
+            <li><a class="dropdown-item sort-link" href="#" data-sort-by="year_published" data-order="desc">Год (от новых к старым)</a></li>
+        </ul>
+    </div>
+
+    <table class="table table-striped table-hover" style="max-width: auto">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Aвтор</th>
+                <th>Жанр</th>
+                <th>Год</th>
+                {% if is_admin %}
+                <th>Действия</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for book in book_list %}
+            <tr>
+                <td><a class="link-underline link-underline-opacity-0" href="{% url 'books:book_detail' book.id %}">{{ book.title }}</a></td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.genre }}</td>
+                <td>{{ book.year_published }}</td>
+                {% if is_admin %}
+                <td>
+                    <a href="{% url 'books:book_update' book.id %}" class="btn btn-primary">Изменить</a>
+                    <a href="{% url 'books:book_delete' book.id %}" class="btn btn-danger">Удалить</a>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.sort-link').click(function(e) {
+                e.preventDefault();
+                var sortBy = $(this).data('sort-by');
+                var order = $(this).data('order');
+                $.ajax({
+                    url: '?sort_by=' + sortBy + '&order=' + order,
+                    success: function(data) {$('table tbody').html($(data).find('table tbody').html());
+                    }
+                });
+            });
+        });
+    </script>
+    {% endblock %}
+{% endblock %}
