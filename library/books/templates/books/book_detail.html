@@ -14,5 +14,31 @@
         <p><strong>Год создания:</strong> {{ book.year_published }}</p>
         <p><strong>Описание:</strong> {{ book.description }}</p>
 
-    <a href="{% url 'books:book_list' %}" class="btn btn-secondary">Обратно к списку</a>
+    <h4>Отзывы</h4>
+    {% if request.user.is_authenticated %}
+    <div class="mb-2">
+        <a class="btn btn-success" href="{% url 'books:review_create' book.id %}">Добавить отзыв</a>
+    </div>
+    {% endif %}
+    {% if reviews %}
+        <ul class="list-group mb-2">
+          {% for review in reviews %}
+            <li class="list-group-item">
+                <p><strong>Пользователь:</strong> {{ review.user.username }}</p>
+                <p><strong>Рейтинг:</strong> {{ review.rating }}</p>
+                <p>{{ review.text }}</p>
+                <p><strong>Добавлено:</strong> {{ review.created_at }}</p>
+                {% if review.user == request.user %}
+                    <a href="{% url 'books:review_update' book.id review.id %}" class="btn btn-outline-warning">Изменить</a>
+                    <a href="{% url 'books:review_delete' book.id review.id %}" class="btn btn-outline-danger">Удалить</a>
+                {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+
+    {% else %}
+        <p>На эту книгу пока что нет отзывов.</p>
+    {% endif %}
+
+    <a href="{% url 'books:book_list' %}" class="btn btn-secondary mb-1">Обратно к списку</a>
 {% endblock %}

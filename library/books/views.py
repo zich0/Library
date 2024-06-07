@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Book, Review
 from .forms import BookForm, ReviewForm, LoginForm, SignupForm
 from django.urls import reverse, reverse_lazy
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 
@@ -54,19 +54,19 @@ def book_list(request):
     sort_by = request.GET.get('sort_by', 'year_published')
     order = request.GET.get('order', 'asc')
 
-    book_list = Book.objects.all().order_by('title')
+    books = Book.objects.all().order_by('title')
 
     is_admin = request.user.is_staff
 
     if sort_by == 'title':
-        book_list = book_list.order_by('-title' if order == 'desc' else 'title')
+        books = books.order_by('-title' if order == 'desc' else 'title')
     elif sort_by == 'author':
-        book_list = book_list.order_by('-author' if order == 'desc' else 'author')
+        books = books.order_by('-author' if order == 'desc' else 'author')
     elif sort_by == 'year_published':
-        book_list = book_list.order_by('-year_published' if order == 'desc' else 'year_published')
+        books = books.order_by('-year_published' if order == 'desc' else 'year_published')
 
     context = {
-        'book_list': book_list,
+        'book_list': books,
         'is_admin': is_admin,
     }
     return render(request, 'books/book_list.html', context)
@@ -76,6 +76,12 @@ class BookDetailView(DetailView):
     template_name = 'books/book_detail.html'
     pk_url_kwarg = 'book_id'
     context_object_name = 'book'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        book = self.get_object()
+        context['reviews'] = Review.objects.filter(book=book)
+        return context
 
 class BookCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Book
@@ -103,7 +109,6 @@ class BookUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 class BookDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Book
     pk_url_kwarg = 'book_id'
-    template_name = 'books/book_confirm_delete.html'
     success_url = reverse_lazy('books:book_list')
 
     def test_func(self):
@@ -115,18 +120,45 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
     template_name = 'books/review_form.html'
 
     def form_valid(self, form):
-        form.instance.book_id = self.kwargs['book_pk']
+        form.instance.book = get_object_or_404(Book, id=self.kwargs['book_id'])
         form.instance.user = self.request.user
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('books:book_detail', kwargs={'pk': self.kwargs['book_pk']})
+        return reverse_lazy('books:book_detail', kwargs={'book_id': self.object.book.id})
+
+class ReviewUpdateView(LoginRequiredMixin, UpdateView):
+    model = Review
+    form_class = ReviewForm
+    template_name = 'books/review_form.html'
+    pk_url_kwarg = 'review_id'
+
+    def test_func(self):
+        review = self.get_object()
+        return review.user == self.request.user
+
+    def get_success_url(self):
+        return reverse_lazy('books:book_detail', kwargs={'book_id': self.object.book.id})
+
+class ReviewDeleteView(LoginRequiredMixin, DeleteView):
+    model = Review
+    template_name = 'books/review_delete.html'
+    pk_url_kwarg = 'review_id'
+    context_object_name = 'review'
+
+    def test_func(self):
+        review = self.get_object()
+        return review.user == self.request.user
+
+    def get_success_url(self):
+        return reverse_lazy('books:book_detail', kwargs={'book_id': self.object.book.id})
+
 
 class SignupView(CreateView):
     model = User
     form_class = SignupForm
     template_name = 'base/signup.html'
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('books:book_list')
 
     def form_valid(self, form):
         user = form.save()

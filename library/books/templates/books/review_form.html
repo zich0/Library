@@ -1,0 +1,15 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+    {% if object %}Изменить отзыв{% else %}Добавить отзыв{% endif %}
+{% endblock %}
+
+{% block content %}
+    <h1>{% if object %}Изменить отзыв{% else %}Добавить отзыв на книгу {% endif %}</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Сохранить</button>
+        <a href="javascript:history.back()" class="btn btn-outline-secondary">Отмена</a>
+    </form>
+{% endblock %}

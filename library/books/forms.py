@@ -20,7 +20,12 @@ class BookForm(forms.ModelForm):
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ['book', 'user', 'text', 'rating']
+        fields = ['text', 'rating']
+
+        labels = {
+            'text':'Текст',
+            'rating':'Рейтинг',
+        }
 
 
 class SignupForm(UserCreationForm):
