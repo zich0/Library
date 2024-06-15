@@ -2,9 +2,17 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 
+class Author(models.Model):
+    name = models.CharField(max_length=100)
+    bio = models.TextField()
+    cover_image = models.ImageField(upload_to='author_covers', null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
 class Book(models.Model):
     title = models.CharField(max_length=100)
-    author = models.CharField(max_length=100)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='books')
     genre = models.CharField(max_length=100)
     year_published = models.IntegerField()
     description = models.TextField()

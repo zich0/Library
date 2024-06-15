@@ -1,30 +1,35 @@
 {% extends 'base/base.html' %}
 
-{% block title %}Book Catalog{% endblock %}
+{% block title %}Список авторов{% endblock %}
 
 {% block content %}
-    <h1>Book Catalog</h1>
-    <a href="{% url 'books:author_add' %}" class="btn btn-primary">Add author</a>
+    <h1>Список авторов</h1>
+    {% if is_admin %}
+    <a href="{% url 'books:author_add' %}" class="btn btn-primary mb-1">Добавить</a>
+    {% endif %}
     <table class="table table-striped">
         <thead>
             <tr>
-                <th></th>
-                <th>Name</th>
-                <th>Bio</th>
-                <th>Actions</th>
+                <th>Портрет</th>
+                <th>Имя</th>
+                <th>Биография</th>
+                {% if is_admin %}
+                <th>Действия</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
             {% for author in author_list %}
             <tr>
-
-                <td>{{ author.name }}</td>
+                <td><img src="{{ author.cover_image.url }}" class="img-fluid shadow-lg rounded"></td>
+                <td><a href="{% url 'books:author_detail' author.id %}">{{ author.name }}</a></td>
                 <td>{{ author.bio }}</td>
+                {% if is_admin %}
                 <td>
-                    <a href="{% url 'books:author_detail' author.id %}" class="btn btn-info">View</a>
-                    <a href="{% url 'books:book_update' author.id %}" class="btn btn-warning">Edit</a>
-                    <a href="{% url 'books:book_delete' author.id %}" class="btn btn-danger">Delete</a>
+                    <a href="{% url 'books:author_update' author.id %}" class="btn btn-primary">Изменить</a>
+                    <a href="{% url 'books:author_delete' author.id %}" class="btn btn-danger">Удалить</a>
                 </td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

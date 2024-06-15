@@ -1,11 +1,25 @@
 {% extends 'base/base.html' %}
 
-{% block title %}Author Detail{% endblock %}
+{% block title %}{{ author.name }}{% endblock %}
 
 {% block content %}
-    <h1>{{ book.title }}</h1>
-    <img src="{{ author.cover.url }}" alt="{{ author.name }}" class="img-fluid mb-3" style="max-width: 200px;">
-    <p><strong>Биография:</strong> {{ author.bio }}</p>
+    <h1>{{ author.name }}</h1>
+    {% if author.cover_image %}
+    <img src="{{ author.cover_image.url }}" class="img-fluid shadow-lg mb-3 bg-body-tertiary rounded detail">
+    {% else %}
+    <p>Нет доступного изображения</p>
+    {% endif %}
+        <p><strong>Биография: </strong> {{ author.bio }}</p>
+        <strong>Книги: </strong>
+        <ul>
+            {% for book in author.books.all %}
+            <li>
+                <a href="{% url 'books:book_detail' book.id %}">{{ book.title }}</a>
+            </li>
+            {% endfor %}
+        </ul>
 
-    <a href="{% url 'books:author_list' %}" class="btn btn-secondary">Обратно к списку</a>
+
+
+    <a href="{% url 'books:author_list' %}" class="btn btn-secondary mb-1">Обратно к списку</a>
 {% endblock %}

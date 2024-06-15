@@ -1,6 +1,13 @@
 from django.contrib import admin
-from .models import Book, Review
+from .models import Book, Review, Author
 
+
+class BookInline(admin.TabularInline):
+    model = Book
+    extra = 0
+    fields = ('title', 'author', 'genre', 'year_published', 'description')
+    can_delete = True
+    show_change_link = True
 
 class ReviewInline(admin.TabularInline):
     model = Review
@@ -9,6 +16,15 @@ class ReviewInline(admin.TabularInline):
     readonly_fields = ('created_at',)
     can_delete = True
     show_change_link = True
+
+@admin.register(Author)
+class AuthorAdmin(admin.ModelAdmin):
+    list_display = ('name', 'bio')
+    list_filter = ('name', )
+    search_fields = ('name', )
+    ordering = ('name',)
+
+    inlines = [BookInline]
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):

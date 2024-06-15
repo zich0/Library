@@ -1,55 +1,61 @@
 from django.contrib.auth.models import User
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .models import Book, Review
-from .forms import BookForm, ReviewForm, LoginForm, SignupForm
+from .models import Book, Review, Author
+from .forms import BookForm, ReviewForm, LoginForm, SignupForm, AuthorForm
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 
 
-# class AuthorListView(ListView):
-#     model = Author
-#     template_name = 'books/author_list.html'
-#     context_object_name = 'authors'
-#
-# class AuthorDetailView(DetailView):
-#     model = Author
-#     template_name = 'books/author_detail.html'
-#     pk_url_kwarg = 'author_id'
-#
-# class AuthorCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-#     model = Author
-#     form_class = AuthorForm
-#     template_name = 'books/author_form.html'
-#
-#     def test_func(self):
-#         return self.request.user.is_staff
-#
-#     def get_success_url(self):
-#         return reverse('books:author_list')
-#
-# class AuthorUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-#     model = Author
-#     form_class = AuthorForm
-#     template_name = 'books/author_form.html'
-#     pk_url_kwarg = 'author_id'
-#
-#     def test_func(self):
-#         return self.request.user.is_staff
-#
-#     def get_success_url(self):
-#         return reverse('books:author_list')
-#
-# class AuthorDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-#     model = Book
-#     pk_url_kwarg = 'author_id'
-#     template_name = 'books/author_confirm_delete.html'
-#     success_url = reverse_lazy('books:author_list')
-#
-#     def test_func(self):
-#         return self.request.user.is_staff
+class AuthorListView(ListView):
+    model = Author
+    template_name = 'books/author_list.html'
+    context_object_name = 'author_list'
+
+
+class AuthorDetailView(DetailView):
+    model = Author
+    template_name = 'books/author_detail.html'
+    pk_url_kwarg = 'author_id'
+
+
+class AuthorCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = Author
+    form_class = AuthorForm
+    template_name = 'books/author_form.html'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def get_success_url(self):
+        return reverse_lazy('books:author_detail', kwargs={'author_id': self.object.id})
+
+
+class AuthorUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Author
+    form_class = AuthorForm
+    template_name = 'books/author_form.html'
+    pk_url_kwarg = 'author_id'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def get_success_url(self):
+        return reverse_lazy('books:author_list')
+
+
+class AuthorDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Book
+    pk_url_kwarg = 'author_id'
+    template_name = 'books/author_confirm_delete.html'
+    success_url = reverse_lazy('books:author_list')
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+
 def book_list(request):
     sort_by = request.GET.get('sort_by', 'year_published')
     order = request.GET.get('order', 'asc')
@@ -61,7 +67,7 @@ def book_list(request):
     if sort_by == 'title':
         books = books.order_by('-title' if order == 'desc' else 'title')
     elif sort_by == 'author':
-        books = books.order_by('-author' if order == 'desc' else 'author')
+        books = books.order_by('-author__name' if order == 'desc' else 'author__name')
     elif sort_by == 'year_published':
         books = books.order_by('-year_published' if order == 'desc' else 'year_published')
 
@@ -104,12 +110,13 @@ class BookUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.request.user.is_staff
 
     def get_success_url(self):
-        return reverse('books:book_list')
+        return reverse_lazy('books:book_list')
 
 class BookDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Book
     pk_url_kwarg = 'book_id'
     success_url = reverse_lazy('books:book_list')
+
 
     def test_func(self):
         return self.request.user.is_staff

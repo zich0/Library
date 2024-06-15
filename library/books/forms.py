@@ -1,5 +1,5 @@
 from django import forms
-from .models import Book, Review
+from .models import Book, Review, Author
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from crispy_forms.helper import FormHelper
@@ -11,10 +11,11 @@ class BookForm(forms.ModelForm):
         model = Book
         fields = ['title', 'author', 'genre', 'description', 'year_published', 'cover_image']
 
-# class AuthorForm(forms.ModelForm):
-#     class Meta:
-#         model = Author
-#         fields = ['name', 'bio']
+
+class AuthorForm(forms.ModelForm):
+    class Meta:
+        model = Author
+        fields = ['name', 'bio', 'cover_image']
 
 
 class ReviewForm(forms.ModelForm):
