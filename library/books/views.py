@@ -7,6 +7,7 @@ from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
+from django.db.models import Q
 
 
 class AuthorListView(ListView):
@@ -70,6 +71,10 @@ def book_list(request):
         books = books.order_by('-author__name' if order == 'desc' else 'author__name')
     elif sort_by == 'year_published':
         books = books.order_by('-year_published' if order == 'desc' else 'year_published')
+
+    query = request.GET.get('search')
+    if query:
+        books = Book.objects.filter(Q(title__icontains=query) | Q(author__name__icontains=query))
 
     context = {
         'book_list': books,
@@ -191,3 +196,14 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('books:book_list')
+
+
+# def search_view(request):
+#     if request.method == 'GET':
+#         query = request.GET.get('search')
+#         if query:
+#             books = Book.objects.filter(Q(title__icontains=query) | Q(author__icontains=query))
+#             context = {
+#                 'book_list': books,
+#             }
+#             return render(request, 'books/search_results.html', context)

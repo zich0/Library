@@ -22,7 +22,7 @@
         </ul>
     </div>
 
-    <table class="table table-striped table-hover" style="max-width: auto">
+    <table class="table table-striped table-hover">
         <thead>
             <tr>
                 <th></th>
@@ -41,7 +41,7 @@
             <tr>
                 <td><img src="{{ book.cover_image.url }}" class="img-fluid shadow-lg mb-3 bg-body-tertiary rounded"></td>
                 <td><a class="link-underline link-underline-opacity-0" href="{% url 'books:book_detail' book.id %}">{{ book.title }}</a></td>
-                <td>{{ book.author }}</td>
+                <td><a href="{% url 'books:author_detail' book.author.id %}">{{ book.author }}</a></td>
                 <td>{{ book.genre }}</td>
                 <td>{{ book.year_published }}</td>
                 <td>{{ book.description }}</td>

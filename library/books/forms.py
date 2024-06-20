@@ -69,3 +69,5 @@ class LoginForm(forms.Form):
             Field('password', css_class='form-control', rows=3),
             Submit('submit', 'Ввод', css_class='btn btn-primary')
         )
+
+

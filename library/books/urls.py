@@ -24,5 +24,6 @@ urlpatterns = [
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
     path('signup/', views.SignupView.as_view(), name='signup'),
-    path('author/', include(author_patterns))
+    path('author/', include(author_patterns)),
+    # path('search_results/', views.search_view, name='search_results'),
 ]
