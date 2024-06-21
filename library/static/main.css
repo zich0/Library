@@ -29,6 +29,7 @@ main {
     width: 100%;
     background-color: black;
     z-index: 1;
+    grid-gap:10px;
 }
 
 .container-fluid {
@@ -39,7 +40,20 @@ main {
     transform: translate(-50%, 0);
     color: white;
     z-index: -1;
-    grid-gap:10px;
     align-items: center;
+    grid-gap:10px;
 }
 
+a {
+    background-image: linear-gradient(to right, #352384, #e90b8b); /* Параметры градиента */
+    background-repeat: no-repeat; /* Фон не повторяется */
+    background-size: 0px 2px; /* Линия будет шириной 0px и высотой 2px */
+    background-position: left bottom; /* Положение в левом нижнем углу */
+    padding-bottom: 2px; /* Расстояние от текста до линии */
+    text-decoration: none; /* Убираем подчёркивание */
+    transition: 0.3s; /* Время перехода */
+   }
+   a:hover {
+    background-size: 100% 2px; /* Линия занимает всю ширину */
+    color: purple;
+   }

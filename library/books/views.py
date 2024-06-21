@@ -9,11 +9,26 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
 
-
 class AuthorListView(ListView):
     model = Author
     template_name = 'books/author_list.html'
     context_object_name = 'author_list'
+
+
+def author_list(request):
+    sort_by = request.GET.get('sort_by', 'name')
+    order = request.GET.get('order', 'asc')
+
+    authors = Author.objects.all()
+
+    if sort_by == 'name':
+        authors = authors.order_by('-name' if order == 'desc' else 'name')
+
+    context = {
+        'author_list': authors,
+    }
+
+    return render(request, 'books/author_list.html', context)
 
 
 class AuthorDetailView(DetailView):
@@ -74,7 +89,7 @@ def book_list(request):
 
     query = request.GET.get('search')
     if query:
-        books = Book.objects.filter(Q(title__icontains=query) | Q(author__name__icontains=query))
+        books = Book.objects.filter(Q(title__iregex=fr'(?i){query}') | Q(author__name__iregex=fr'(?i){query}'))
 
     context = {
         'book_list': books,
@@ -196,14 +211,3 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('books:book_list')
-
-
-# def search_view(request):
-#     if request.method == 'GET':
-#         query = request.GET.get('search')
-#         if query:
-#             books = Book.objects.filter(Q(title__icontains=query) | Q(author__icontains=query))
-#             context = {
-#                 'book_list': books,
-#             }
-#             return render(request, 'books/search_results.html', context)

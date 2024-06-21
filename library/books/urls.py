@@ -4,7 +4,7 @@ from . import views
 app_name = 'books'
 
 author_patterns = [
-    path('', views.AuthorListView.as_view(), name='author_list'),
+    path('', views.author_list, name='author_list'),
     path('create/', views.AuthorCreateView.as_view(), name='author_add'),
     path('<int:author_id>/detail', views.AuthorDetailView.as_view(), name='author_detail'),
     path('<int:author_id>/update', views.AuthorUpdateView.as_view(), name='author_update'),

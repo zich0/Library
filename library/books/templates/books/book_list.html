@@ -1,6 +1,6 @@
 {% extends 'base/base.html' %}
 
-{% block title %}Book Catalog{% endblock %}
+{% block title %}Каталог книг{% endblock %}
 
 {% block content %}
     <h1 align>Список книг</h1>
@@ -13,12 +13,12 @@
             Сортировать
         </button>
         <ul class="dropdown-menu" aria-labelledby="sortDropdown">
-            <li><a class="dropdown-item sort-link" href="#" data-sort-by="title" data-order="asc">Название (А-Я)</a></li>
-            <li><a class="dropdown-item sort-link" href="#" data-sort-by="title" data-order="desc">Название (Я-А)</a></li>
-            <li><a class="dropdown-item sort-link" href="#" data-sort-by="author" data-order="asc">Автор (А-Я)</a></li>
-            <li><a class="dropdown-item sort-link" href="#" data-sort-by="author" data-order="desc">Автор (Я-А)</a></li>
-            <li><a class="dropdown-item sort-link" href="#" data-sort-by="year_published" data-order="asc">Год (от старых к новым)</a></li>
-            <li><a class="dropdown-item sort-link" href="#" data-sort-by="year_published" data-order="desc">Год (от новых к старым)</a></li>
+            <li><a class="dropdown-item" href="?sort_by=title&order=asc">Название (А-Я)</a></li>
+            <li><a class="dropdown-item" href="?sort_by=title&order=desc">Название (Я-А)</a></li>
+            <li><a class="dropdown-item" href="?sort_by=author&order=asc">Автор (А-Я)</a></li>
+            <li><a class="dropdown-item" href="?sort_by=author&order=desc">Автор (Я-А)</a></li>
+            <li><a class="dropdown-item" href="?sort_by=year_published&order=asc">Год (от старых к новым)</a></li>
+            <li><a class="dropdown-item" href="?sort_by=year_published&order=desc">Год (от новых к старым)</a></li>
         </ul>
     </div>
 
@@ -56,21 +56,6 @@
         </tbody>
     </table>
 
-    {% block scripts %}
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('.sort-link').click(function(e) {
-                e.preventDefault();
-                var sortBy = $(this).data('sort-by');
-                var order = $(this).data('order');
-                $.ajax({
-                    url: '?sort_by=' + sortBy + '&order=' + order,
-                    success: function(data) {$('table tbody').html($(data).find('table tbody').html());
-                    }
-                });
-            });
-        });
-    </script>
-    {% endblock %}
+
+
 {% endblock %}
