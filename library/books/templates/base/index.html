@@ -1,32 +1,48 @@
-{% if request.user.is_authenticated %}
-  <div class="container-fluid" align="right">
-    <h2 align="right">{{ request.user.username }}</h2>
-    <a href="{% url 'books:logout' %}" class="btn btn-outline-primary">Выйти</a>
-  </div>
-{% else %}
-  <div class="container-fluid" align="right">
-    <h2>Вы не вошли в аккаунт</h2>
-    <a href="{% url 'books:login' %}" class="btn btn-outline-primary" role="button">Войти</a>
-    <a href="{% url 'books:signup' %}" class="btn btn-outline-danger" role="button">Регистрация</a>
-  </div>
-{% endif %}
-<div class="container">
+<!--{% if request.user.is_authenticated %}-->
+<!--  <div class="container-fluid" align="right">-->
+<!--    <h2 align="right">{{ request.user.username }}</h2>-->
+<!--    <a href="{% url 'books:logout' %}" class="btn btn-outline-primary">Выйти</a>-->
+<!--  </div>-->
+<!--{% else %}-->
+<!--  <div class="container-fluid" align="right">-->
+<!--    <h2>Вы не вошли в аккаунт</h2>-->
+<!--    <a href="{% url 'books:login' %}" class="btn btn-outline-primary" role="button">Войти</a>-->
+<!--    <a href="{% url 'books:signup' %}" class="btn btn-outline-danger" role="button">Регистрация</a>-->
+<!--  </div>-->
+<!--{% endif %}-->
+<nav>
+  <div>
   <ul class="nav nav-pills">
-    <li class="nav-item">
-      <a class="nav-link active" aria-current="page" href="{% url 'books:book_list' %}">Главная</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">Жанры</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'books:author_list' %}">Авторы</a>
-    </li>
-    <li>
-      <form action="{% url 'books:book_list' %}" class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Поиск" name="search">
-        <button class="btn btn-outline-success" type="submit">Поиск</button>
-      </form>
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'books:book_list' %}">Главная</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Жанры</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'books:author_list' %}">Авторы</a>
+      </li>
+      <li>
+        <form action="{% url 'books:book_list' %}" class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="Поиск" name="search">
+          <button class="btn btn-outline-success" type="submit">Поиск</button>
+        </form>
 
-    </li>
-  </ul>
-</div>
+      </li>
+      <li>
+        {% if request.user.is_authenticated %}
+          <div class="container-fluid">
+            <div>{{ request.user.username }}</div>
+            <a href="{% url 'books:logout' %}" class="btn btn-outline-primary">Выйти</a>
+          </div>
+        {% else %}
+          <div class="container-fluid">
+            <div>Вы не вошли в аккаунт</div>
+            <a href="{% url 'books:login' %}" class="btn btn-outline-primary" role="button">Войти</a>
+            <a href="{% url 'books:signup' %}" class="btn btn-outline-danger" role="button">Регистрация</a>
+          </div>
+        {% endif %}
+      </li>
+    </ul>
+  </div>
+</nav>
