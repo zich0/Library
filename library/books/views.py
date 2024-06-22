@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
+from django.core.paginator import Paginator
 
 class AuthorListView(ListView):
     model = Author
@@ -23,6 +24,10 @@ def author_list(request):
 
     if sort_by == 'name':
         authors = authors.order_by('-name' if order == 'desc' else 'name')
+
+    paginator = Paginator(authors, 2)  # 7 книг на страницу
+    page_number = request.GET.get('page')
+    authors = paginator.get_page(page_number)
 
     context = {
         'author_list': authors,
@@ -90,6 +95,10 @@ def book_list(request):
     query = request.GET.get('search')
     if query:
         books = Book.objects.filter(Q(title__iregex=fr'(?i){query}') | Q(author__name__iregex=fr'(?i){query}'))
+
+    paginator = Paginator(books, 2)  # 7 книг на страницу
+    page_number = request.GET.get('page')
+    books = paginator.get_page(page_number)
 
     context = {
         'book_list': books,

@@ -53,7 +53,8 @@ a {
     text-decoration: none; /* Убираем подчёркивание */
     transition: 0.3s; /* Время перехода */
    }
-   a:hover {
+a:hover {
     background-size: 100% 2px; /* Линия занимает всю ширину */
     color: purple;
-   }
+}
+
