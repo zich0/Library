@@ -45,16 +45,13 @@ main {
 }
 
 a {
-    background-image: linear-gradient(to right, #352384, #e90b8b); /* Параметры градиента */
-    background-repeat: no-repeat; /* Фон не повторяется */
-    background-size: 0px 2px; /* Линия будет шириной 0px и высотой 2px */
-    background-position: left bottom; /* Положение в левом нижнем углу */
-    padding-bottom: 2px; /* Расстояние от текста до линии */
-    text-decoration: none; /* Убираем подчёркивание */
-    transition: 0.3s; /* Время перехода */
+    text-decoration: none;
+    transition: 0.3s;
    }
 a:hover {
-    background-size: 100% 2px; /* Линия занимает всю ширину */
     color: purple;
 }
 
+a.dropdown-toggle {
+    color: white;
+}

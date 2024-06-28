@@ -20,7 +20,14 @@
       <li>
         {% if request.user.is_authenticated %}
           <div class="container-fluid">
-            <div>{{ request.user.username }}</div>
+            <div class="dropdown">
+                <a class="dropdown-toggle" role="button" href="#" data-bs-toggle="dropdown">{{ request.user.username }}</a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="{% url 'users:user_update' %}">Личный кабинет</a></li>
+                    <li><a class="dropdown-item" href="#">Другое действие</a></li>
+                    <li><a class="dropdown-item" href="#">Что-то еще здесь</a></li>
+                </ul>
+            </div>
             <a href="{% url 'books:logout' %}" class="btn btn-outline-primary">Выйти</a>
           </div>
         {% else %}

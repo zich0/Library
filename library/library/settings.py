@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'books.apps.BooksConfig',
     'crispy_forms',
     'crispy_bootstrap4',
-
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -133,3 +133,5 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+LOGIN_URL = "/login/"

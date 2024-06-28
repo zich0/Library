@@ -1,0 +1,15 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+    {{ user.username }}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ user.username }}</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a href="{% url 'books:book_list' %}" class="btn btn-secondary">Отмена</a>
+    </form>
+{% endblock %}
