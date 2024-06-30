@@ -31,7 +31,7 @@
                 <th>Жанр</th>
                 <th>Год</th>
                 <th>Описание</th>
-                {% if is_admin %}
+                {% if is_authenticated %}
                 <th>Действия</th>
                 {% endif %}
             </tr>
@@ -45,12 +45,20 @@
                 <td>{{ book.genre }}</td>
                 <td>{{ book.year_published }}</td>
                 <td>{{ book.description }}</td>
-                {% if is_admin %}
+                {% if is_authenticated %}
                 <td>
+                    {% if is_admin %}
                     <a href="{% url 'books:book_update' book.id %}" class="btn btn-primary">Изменить</a>
                     <a href="{% url 'books:book_delete' book.id %}" class="btn btn-danger">Удалить</a>
+                    {% endif %}
+                    {% if book.id in favorite_list %}
+                    <a href="{% url 'users:favorite_add' book.id %}" class="btn btn-outline-primary %}">Удалить из избранного</a>
+                    {% else %}
+                    <a href="{% url 'users:favorite_add' book.id %}" class="btn btn-outline-primary %}">В избранное</a>
+                    {% endif %}
                 </td>
                 {% endif %}
+
             </tr>
             {% endfor %}
         </tbody>

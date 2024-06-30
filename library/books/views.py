@@ -9,6 +9,7 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
 from django.core.paginator import Paginator
+from users.models import Favorite
 
 class AuthorListView(ListView):
     model = Author
@@ -25,7 +26,7 @@ def author_list(request):
     if sort_by == 'name':
         authors = authors.order_by('-name' if order == 'desc' else 'name')
 
-    paginator = Paginator(authors, 2)  # 7 книг на страницу
+    paginator = Paginator(authors, 5)
     page_number = request.GET.get('page')
     authors = paginator.get_page(page_number)
 
@@ -84,6 +85,7 @@ def book_list(request):
     books = Book.objects.all().order_by('title')
 
     is_admin = request.user.is_staff
+    is_authenticated = request.user.is_authenticated
 
     if sort_by == 'title':
         books = books.order_by('-title' if order == 'desc' else 'title')
@@ -96,14 +98,19 @@ def book_list(request):
     if query:
         books = Book.objects.filter(Q(title__iregex=fr'(?i){query}') | Q(author__name__iregex=fr'(?i){query}'))
 
-    paginator = Paginator(books, 2)  # 7 книг на страницу
+    paginator = Paginator(books, 5)
     page_number = request.GET.get('page')
     books = paginator.get_page(page_number)
 
     context = {
         'book_list': books,
         'is_admin': is_admin,
+        'is_authenticated': is_authenticated,
     }
+
+    if is_authenticated:
+        context['favorite_list'] = Favorite.objects.filter(user=request.user).values_list('book_id', flat=True)
+
     return render(request, 'books/book_list.html', context)
 
 class BookDetailView(DetailView):

@@ -20,12 +20,15 @@
       <li>
         {% if request.user.is_authenticated %}
           <div class="container-fluid">
+            <span class="circle-image">
+                <img src="{{ request.user.user_image.image.url }}" class="img-fluid shadow-lg mb-3 bg-body-tertiary">
+            </span>
             <div class="dropdown">
                 <a class="dropdown-toggle" role="button" href="#" data-bs-toggle="dropdown">{{ request.user.username }}</a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="{% url 'users:user_update' %}">Личный кабинет</a></li>
-                    <li><a class="dropdown-item" href="#">Другое действие</a></li>
-                    <li><a class="dropdown-item" href="#">Что-то еще здесь</a></li>
+                    <li><a class="dropdown-item" href="{% url 'users:favorite_list' %}">Избранное</a></li>
+                    <li><a class="dropdown-item" href="#">Написать нам</a></li>
                 </ul>
             </div>
             <a href="{% url 'books:logout' %}" class="btn btn-outline-primary">Выйти</a>
