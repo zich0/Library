@@ -2,13 +2,14 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .forms import UserUpdateForm, UserImageChangeForm
+from .forms import UserUpdateForm, UserImageChangeForm, SignupForm, LoginForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse, reverse_lazy
 from .models import UserImage, Favorite
 from django.db.models import Q
 from django.core.paginator import Paginator
 from books.models import Book
+from django.contrib.auth import authenticate, login, logout
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
@@ -53,17 +54,17 @@ def favorite_list(request):
     favorites = Favorite.objects.filter(user=request.user).order_by('book__title')
 
     if sort_by == 'title':
-        books = favorites.order_by('-book__title' if order == 'desc' else 'book__title')
+        favorites = favorites.order_by('-book__title' if order == 'desc' else 'book__title')
     elif sort_by == 'author':
-        books = favorites.order_by('-book__author__name' if order == 'desc' else 'book__author__name')
+        favorites = favorites.order_by('-book__author__name' if order == 'desc' else 'book__author__name')
     elif sort_by == 'year_published':
-        books = favorites.order_by('-book__year_published' if order == 'desc' else 'book__year_published')
+        favorites = favorites.order_by('-book__year_published' if order == 'desc' else 'book__year_published')
 
     query = request.GET.get('search')
     if query:
         favorites = Favorite.objects.filter(Q(title__iregex=fr'(?i){query}') | Q(author__name__iregex=fr'(?i){query}'))
 
-    paginator = Paginator(books, 5)
+    paginator = Paginator(favorites, 5)
     page_number = request.GET.get('page')
     favorites = paginator.get_page(page_number)
 
@@ -89,4 +90,36 @@ def favorite_add(request, book_id):
         favorite.delete()
     except Favorite.DoesNotExist:
         Favorite.objects.create(user=user, book=book)
+    return redirect('books:book_list')
+
+
+class SignupView(CreateView):
+    model = User
+    form_class = SignupForm
+    template_name = 'base/signup.html'
+    success_url = reverse_lazy('books:book_list')
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect(self.success_url)
+
+
+def user_login(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('books:book_list')
+    else:
+        form = LoginForm()
+    return render(request, 'base/login.html', {'form': form})
+
+
+def user_logout(request):
+    logout(request)
     return redirect('books:book_list')

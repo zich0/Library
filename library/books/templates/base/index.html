@@ -19,10 +19,12 @@
       </li>
       <li>
         {% if request.user.is_authenticated %}
-          <div class="container-fluid">
-            <span class="circle-image">
-                <img src="{{ request.user.user_image.image.url }}" class="img-fluid shadow-lg mb-3 bg-body-tertiary">
-            </span>
+            <div class="container-fluid">
+                {% if request.user.user_image.image %}
+                <span class="circle-image">
+                    <img src="{{ request.user.user_image.image.url }}" class="img-fluid shadow-lg mb-3 bg-body-tertiary">
+                </span>
+                {% endif %}
             <div class="dropdown">
                 <a class="dropdown-toggle" role="button" href="#" data-bs-toggle="dropdown">{{ request.user.username }}</a>
                 <ul class="dropdown-menu dropdown-menu-end">
@@ -31,13 +33,13 @@
                     <li><a class="dropdown-item" href="#">Написать нам</a></li>
                 </ul>
             </div>
-            <a href="{% url 'books:logout' %}" class="btn btn-outline-primary">Выйти</a>
+            <a href="{% url 'users:logout' %}" class="btn btn-outline-primary">Выйти</a>
           </div>
         {% else %}
           <div class="container-fluid">
             <div>Вы не вошли в аккаунт</div>
-            <a href="{% url 'books:login' %}" class="btn btn-outline-primary" role="button">Войти</a>
-            <a href="{% url 'books:signup' %}" class="btn btn-outline-danger" role="button">Регистрация</a>
+            <a href="{% url 'users:login' %}" class="btn btn-outline-primary" role="button">Войти</a>
+            <a href="{% url 'users:signup' %}" class="btn btn-outline-danger" role="button">Регистрация</a>
           </div>
         {% endif %}
       </li>

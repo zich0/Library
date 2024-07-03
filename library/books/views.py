@@ -2,19 +2,12 @@ from django.contrib.auth.models import User
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Book, Review, Author
-from .forms import BookForm, ReviewForm, LoginForm, SignupForm, AuthorForm
+from .forms import BookForm, ReviewForm, AuthorForm
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
-from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
 from django.core.paginator import Paginator
 from users.models import Favorite
-
-class AuthorListView(ListView):
-    model = Author
-    template_name = 'books/author_list.html'
-    context_object_name = 'author_list'
 
 
 def author_list(request):
@@ -195,35 +188,3 @@ class ReviewDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('books:book_detail', kwargs={'book_id': self.object.book.id})
-
-
-class SignupView(CreateView):
-    model = User
-    form_class = SignupForm
-    template_name = 'base/signup.html'
-    success_url = reverse_lazy('books:book_list')
-
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect(self.success_url)
-
-
-def user_login(request):
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('books:book_list')
-    else:
-        form = LoginForm()
-    return render(request, 'base/login.html', {'form': form})
-
-
-def user_logout(request):
-    logout(request)
-    return redirect('books:book_list')

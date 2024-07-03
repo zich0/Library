@@ -21,9 +21,6 @@ urlpatterns = [
     path('<int:book_id>/reviews/create/', views.ReviewCreateView.as_view(), name='review_create'),
     path('<int:book_id>/reviews/<int:review_id>/update/', views.ReviewUpdateView.as_view(), name='review_update'),
     path('<int:book_id>/reviews/<int:review_id>/delete/', views.ReviewDeleteView.as_view(), name='review_delete'),
-    path('login/', views.user_login, name='login'),
-    path('logout/', views.user_logout, name='logout'),
-    path('signup/', views.SignupView.as_view(), name='signup'),
     path('author/', include(author_patterns)),
     # path('search_results/', views.search_view, name='search_results'),
 ]

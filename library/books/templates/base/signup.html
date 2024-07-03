@@ -9,7 +9,7 @@
         <form method="POST">
             {% csrf_token %}
             {% crispy form %}
-            <a href="{% url 'books:login' %}">Уже есть аккаунт?</a>
+            <a href="{% url 'users:login' %}">Уже есть аккаунт?</a>
         </form>
     </div>
 </div>

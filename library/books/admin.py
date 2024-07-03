@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Book, Review, Author
+from .models import Book, Review, Author, Genre
 
 
 class BookInline(admin.TabularInline):
@@ -23,6 +23,15 @@ class AuthorAdmin(admin.ModelAdmin):
     list_filter = ('name', )
     search_fields = ('name', )
     ordering = ('name',)
+
+    inlines = [BookInline]
+
+@admin.register(Genre)
+class GenreAdmin(admin.ModelAdmin):
+    list_display = ('title', )
+    list_filter = ('title', )
+    search_fields = ('title', )
+    ordering = ('title', )
 
     inlines = [BookInline]
 
