@@ -137,9 +137,15 @@ class GenreDetailView(DetailView):
     def get_context_data(self, **kwargs):
         is_authenticated = self.request.user.is_authenticated
         genre = self.get_object()
+        genre_books = genre.books.all()
+
+        paginator = Paginator(genre_books, 5)
+        page_number = self.request.GET.get('page')
+        genre_books = paginator.get_page(page_number)
 
         context = {
             'genre': genre,
+            'genre_books': genre_books,
             'is_authenticated': is_authenticated,
         }
 

@@ -10,7 +10,7 @@
     <p>No cover image available.</p>
     {% endif %}
         <p><strong>Автор:</strong> <a href="{% url 'books:author_detail' book.author.id %}">{{ book.author }}</a></p>
-        <p><strong>Жанр:</strong> {{ book.genre }}</p>
+        <p><strong>Жанр:</strong> <a href="{% url 'books:genre_detail' book.genre.id %}">{{ book.genre }}</a></p>
         <p><strong>Год создания:</strong> {{ book.year_published }}</p>
         <p><strong>Описание:</strong> {{ book.description }}</p>
 

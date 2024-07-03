@@ -18,7 +18,7 @@
             </tr>
         </thead>
         <tbody class="table-group-divider">
-            {% for book in genre.books.all %}
+            {% for book in genre_books %}
             <tr>
                 <td><img src="{{ book.cover_image.url }}" class="img-fluid shadow-lg mb-3 bg-body-tertiary rounded"></td>
                 <td><a class="link-underline link-underline-opacity-0" href="{% url 'books:book_detail' book.id %}">{{ book.title }}</a></td>
@@ -39,4 +39,27 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <nav>
+        <ul class="pagination justify-content-center">
+            {% if genre_books.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ genre_books.previous_page_number }}">Предыдущая</a></li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Предыдущая</span></li>
+            {% endif %}
+
+            {% for page_number in genre_books.paginator.page_range %}
+                {% if genre_books.number == page_number %}
+                    <li class="page-item active" aria-current="page"><span class="page-link">{{ page_number }}</span></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if genre_books.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ genre_books.next_page_number }}">Следующая</a></li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Следующая</span></li>
+            {% endif %}
+        </ul>
 {% endblock %}
