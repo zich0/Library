@@ -22,5 +22,6 @@ urlpatterns = [
     path('<int:book_id>/reviews/<int:review_id>/update/', views.ReviewUpdateView.as_view(), name='review_update'),
     path('<int:book_id>/reviews/<int:review_id>/delete/', views.ReviewDeleteView.as_view(), name='review_delete'),
     path('author/', include(author_patterns)),
-    # path('search_results/', views.search_view, name='search_results'),
+    path('genres/', views.GenreListView.as_view(), name='genre_list'),
+    path('genres/<int:genre_id>', views.GenreDetailView.as_view(), name='genre_detail'),
 ]

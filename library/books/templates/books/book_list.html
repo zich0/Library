@@ -3,7 +3,7 @@
 {% block title %}Каталог книг{% endblock %}
 
 {% block content %}
-    <h1 align>Список книг</h1>
+    <h1>Список книг</h1>
     {% if is_admin %}
     <a href="{% url 'books:book_add' %}" class="btn btn-primary mb-1">Добавить</a>
     {% endif %}
@@ -42,7 +42,7 @@
                 <td><img src="{{ book.cover_image.url }}" class="img-fluid shadow-lg mb-3 bg-body-tertiary rounded"></td>
                 <td><a class="link-underline link-underline-opacity-0" href="{% url 'books:book_detail' book.id %}">{{ book.title }}</a></td>
                 <td><a href="{% url 'books:author_detail' book.author.id %}">{{ book.author }}</a></td>
-                <td>{{ book.genre }}</td>
+                <td><a href="{% url 'books:genre_detail' book.genre.id %}">{{ book.genre }}</td>
                 <td>{{ book.year_published }}</td>
                 <td>{{ book.description }}</td>
                 {% if is_authenticated %}

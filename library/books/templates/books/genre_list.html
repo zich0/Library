@@ -1,0 +1,40 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Жанры{% endblock %}
+
+{% block content %}
+    <h1>Жанры</h1>
+    <div class="accordion">
+            {% for genre in genres %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading{{ genre.id }}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ genre.id }}" aria-expanded="false" aria-controls="collapse{{ genre.id }}">
+                            {{ genre.title }}
+                        </button>
+                    </h2>
+                    <div id="collapse{{ genre.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ genre.id }}">
+                        <div class="accordion-body">
+                            <div class="row">
+                                {% for book in genre.books.all %}
+                                    {% if forloop.counter <= 5 %}
+                                        <div class="col-md-2 mb-3">
+                                            <div class="card">
+                                                {% if book.cover_image %}
+                                                    <img src="{{ book.cover_image.url }}" class="card-img-top" alt="{{ book.title }}">
+                                                {% endif %}
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{ book.title }}</h5>
+                                                    <a href="{% url 'books:book_detail' book.id %}" class="btn btn-outline-info">Перейти</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                                <a href="{% url 'books:genre_detail' genre.id %}" class="btn btn-outline-primary">Показать больше</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+    </div>
+{% endblock %}

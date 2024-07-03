@@ -90,7 +90,11 @@ def favorite_add(request, book_id):
         favorite.delete()
     except Favorite.DoesNotExist:
         Favorite.objects.create(user=user, book=book)
-    return redirect('books:book_list')
+    referer = request.META.get('HTTP_REFERER')
+    if referer:
+        return redirect(referer)
+    else:
+        return redirect('book_detail', book.id)
 
 
 class SignupView(CreateView):
@@ -120,6 +124,8 @@ def user_login(request):
     return render(request, 'base/login.html', {'form': form})
 
 
+@login_required
 def user_logout(request):
     logout(request)
     return redirect('books:book_list')
+

@@ -1,0 +1,42 @@
+{% extends 'base/base.html' %}
+
+{% block title %}{{ genre.title }}{% endblock %}
+
+{% block content %}
+    <h1>Книги жанра: {{genre.title}}</h1>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Название</th>
+                <th>Aвтор</th>
+                <th>Год</th>
+                <th>Описание</th>
+                {% if is_authenticated %}
+                <th>Действия</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for book in genre.books.all %}
+            <tr>
+                <td><img src="{{ book.cover_image.url }}" class="img-fluid shadow-lg mb-3 bg-body-tertiary rounded"></td>
+                <td><a class="link-underline link-underline-opacity-0" href="{% url 'books:book_detail' book.id %}">{{ book.title }}</a></td>
+                <td><a href="{% url 'books:author_detail' book.author.id %}">{{ book.author }}</a></td>
+                <td>{{ book.year_published }}</td>
+                <td>{{ book.description }}</td>
+                {% if is_authenticated %}
+                <td>
+                    {% if book.id in favorite_list %}
+                    <a href="{% url 'users:favorite_add' book.id %}" class="btn btn-outline-primary %}">Удалить из избранного</a>
+                    {% else %}
+                    <a href="{% url 'users:favorite_add' book.id %}" class="btn btn-outline-primary %}">В избранное</a>
+                    {% endif %}
+                </td>
+                {% endif %}
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

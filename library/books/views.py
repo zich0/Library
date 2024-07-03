@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .models import Book, Review, Author
+from .models import Book, Review, Author, Genre
 from .forms import BookForm, ReviewForm, AuthorForm
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
@@ -188,3 +188,31 @@ class ReviewDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('books:book_detail', kwargs={'book_id': self.object.book.id})
+
+
+class GenreListView(ListView):
+    model = Genre
+    template_name = 'books/genre_list.html'
+    context_object_name = 'genres'
+
+
+class GenreDetailView(DetailView):
+    model = Genre
+    template_name = 'books/genre_detail.html'
+    pk_url_kwarg = 'genre_id'
+    success_url = reverse_lazy('books:genre_detail')
+
+    def get_context_data(self, **kwargs):
+        is_authenticated = self.request.user.is_authenticated
+        genre = self.get_object()
+
+        context = {
+            'genre': genre,
+            'is_authenticated': is_authenticated,
+        }
+
+        if is_authenticated:
+            context['favorite_list'] = Favorite.objects.filter(user=self.request.user).values_list('book_id', flat=True)
+
+        return context
+
