@@ -26,7 +26,7 @@
                 </span>
                 {% endif %}
             <div class="dropdown">
-                <a class="dropdown-toggle" role="button" href="#" data-bs-toggle="dropdown">{{ request.user.username }}</a>
+                <a class="dropdown-toggle profile-name" role="button" href="#" data-bs-toggle="dropdown">{{ request.user.username }}</a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="{% url 'users:user_update' %}">Личный кабинет</a></li>
                     <li><a class="dropdown-item" href="{% url 'users:favorite_list' %}">Избранное</a></li>

@@ -56,6 +56,10 @@ a.dropdown-toggle {
     color: white;
 }
 
+.profile-name:hover {
+    color: Silver;
+}
+
 .circle-image{
     display: inline-block;
     border-radius: 50%;
