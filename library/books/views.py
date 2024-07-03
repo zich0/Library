@@ -36,48 +36,12 @@ class AuthorDetailView(DetailView):
     pk_url_kwarg = 'author_id'
 
 
-class AuthorCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-    model = Author
-    form_class = AuthorForm
-    template_name = 'books/author_form.html'
-
-    def test_func(self):
-        return self.request.user.is_staff
-
-    def get_success_url(self):
-        return reverse_lazy('books:author_detail', kwargs={'author_id': self.object.id})
-
-
-class AuthorUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = Author
-    form_class = AuthorForm
-    template_name = 'books/author_form.html'
-    pk_url_kwarg = 'author_id'
-
-    def test_func(self):
-        return self.request.user.is_staff
-
-    def get_success_url(self):
-        return reverse_lazy('books:author_list')
-
-
-class AuthorDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    model = Book
-    pk_url_kwarg = 'author_id'
-    template_name = 'books/author_confirm_delete.html'
-    success_url = reverse_lazy('books:author_list')
-
-    def test_func(self):
-        return self.request.user.is_staff
-
-
 def book_list(request):
     sort_by = request.GET.get('sort_by', 'year_published')
     order = request.GET.get('order', 'asc')
 
     books = Book.objects.all().order_by('title')
 
-    is_admin = request.user.is_staff
     is_authenticated = request.user.is_authenticated
 
     if sort_by == 'title':
@@ -97,7 +61,6 @@ def book_list(request):
 
     context = {
         'book_list': books,
-        'is_admin': is_admin,
         'is_authenticated': is_authenticated,
     }
 
@@ -118,37 +81,6 @@ class BookDetailView(DetailView):
         context['reviews'] = Review.objects.filter(book=book)
         return context
 
-class BookCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-    model = Book
-    form_class = BookForm
-    template_name = 'books/book_form.html'
-
-    def test_func(self):
-        return self.request.user.is_staff
-
-    def get_success_url(self):
-        return reverse_lazy('books:book_detail', kwargs={'book_id': self.object.id})
-
-class BookUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = Book
-    form_class = BookForm
-    template_name = 'books/book_form.html'
-    pk_url_kwarg = 'book_id'
-
-    def test_func(self):
-        return self.request.user.is_staff
-
-    def get_success_url(self):
-        return reverse_lazy('books:book_list')
-
-class BookDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    model = Book
-    pk_url_kwarg = 'book_id'
-    success_url = reverse_lazy('books:book_list')
-
-
-    def test_func(self):
-        return self.request.user.is_staff
 
 class ReviewCreateView(LoginRequiredMixin, CreateView):
     model = Review

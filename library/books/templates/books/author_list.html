@@ -4,9 +4,6 @@
 
 {% block content %}
     <h1>Список авторов</h1>
-    {% if is_admin %}
-    <a href="{% url 'books:author_add' %}" class="btn btn-primary mb-1">Добавить</a>
-    {% endif %}
 
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button"  data-bs-toggle="dropdown">
@@ -35,12 +32,6 @@
                 <td><img src="{{ author.cover_image.url }}" class="img-fluid shadow-lg rounded"></td>
                 <td><a href="{% url 'books:author_detail' author.id %}">{{ author.name }}</a></td>
                 <td>{{ author.bio }}</td>
-                {% if is_admin %}
-                <td>
-                    <a href="{% url 'books:author_update' author.id %}" class="btn btn-primary">Изменить</a>
-                    <a href="{% url 'books:author_delete' author.id %}" class="btn btn-danger">Удалить</a>
-                </td>
-                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

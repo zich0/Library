@@ -4,9 +4,6 @@
 
 {% block content %}
     <h1>Список книг</h1>
-    {% if is_admin %}
-    <a href="{% url 'books:book_add' %}" class="btn btn-primary mb-1">Добавить</a>
-    {% endif %}
 
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button"  data-bs-toggle="dropdown">
@@ -47,10 +44,6 @@
                 <td>{{ book.description }}</td>
                 {% if is_authenticated %}
                 <td>
-                    {% if is_admin %}
-                    <a href="{% url 'books:book_update' book.id %}" class="btn btn-primary">Изменить</a>
-                    <a href="{% url 'books:book_delete' book.id %}" class="btn btn-danger">Удалить</a>
-                    {% endif %}
                     {% if book.id in favorite_list %}
                     <a href="{% url 'users:favorite_add' book.id %}" class="btn btn-outline-primary %}">Удалить из избранного</a>
                     {% else %}
