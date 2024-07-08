@@ -2,7 +2,7 @@
 Для Linux и MacOS
 ```
 python -m venv venv
-source library/bin/activate
+source venv/bin/activate
 ```
 Для Windows:
 ```
