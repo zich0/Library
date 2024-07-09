@@ -15,6 +15,8 @@
                     <div id="collapse{{ genre.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ genre.id }}" data-bs-parent="#accordionGenre">
                         <div class="accordion-body">
                             <div class="row">
+                                <a href="{% url 'books:genre_detail' genre.id %}" class="btn btn-outline-primary">Показать больше</a>
+                                <p></p>
                                 {% for book in genre.books.all %}
                                     {% if forloop.counter <= 5 %}
                                         <div class="col-md-2 mb-3">
@@ -30,7 +32,7 @@
                                         </div>
                                     {% endif %}
                                 {% endfor %}
-                                <a href="{% url 'books:genre_detail' genre.id %}" class="btn btn-outline-primary">Показать больше</a>
+
                             </div>
                         </div>
                     </div>

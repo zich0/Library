@@ -6,7 +6,7 @@
 <div class="parent">
     <div class="container child">
         <h1>Вход</h1>
-        <form method="POST">
+        <form method="POST" action="?next={{ request.GET.next }}">
             {% csrf_token %}
             {% crispy form %}
             <p>Нет аккаунта? <a href="{% url 'users:signup' %}">Создайте</a></p>

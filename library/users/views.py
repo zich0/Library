@@ -10,6 +10,7 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 from books.models import Book
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.views import LoginView
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
@@ -109,19 +110,10 @@ class SignupView(CreateView):
         return redirect(self.success_url)
 
 
-def user_login(request):
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('books:book_list')
-    else:
-        form = LoginForm()
-    return render(request, 'base/login.html', {'form': form})
+class UserLoginView(LoginView):
+    form_class = LoginForm
+    template_name = 'base/login.html'
+    redirect_authenticated_user = True
 
 
 @login_required

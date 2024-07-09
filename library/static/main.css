@@ -1,6 +1,6 @@
 main {
 
-    padding: 50px;
+    padding-top: 50px;
 }
 
 .child {
@@ -43,6 +43,25 @@ main {
     grid-gap:10px;
 }
 
+@media (max-width: 1000px) {
+    .container-fluid {
+        position: relative;
+        z-index: 1;
+    }
+}
+
+@media (max-width: 786px) {
+    main {
+        padding-top: 100px;
+    }
+}
+
+@media (max-width: 575px) {
+    main {
+        padding-top: 260px;
+    }
+}
+
 a {
     text-decoration: none;
     transition: 0.3s;
@@ -70,4 +89,16 @@ a.dropdown-toggle {
     width:100%;
     height:100%;
     object-fit: cover;
+}
+
+.accordion-button {
+    z-index: 0;
+}
+
+.accordion-button:hover {
+    z-index: 0;
+}
+
+.accordion-button:focus {
+    z-index: 0;
 }

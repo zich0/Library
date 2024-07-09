@@ -44,17 +44,13 @@ class SignupForm(UserCreationForm):
         )
 
 
-class LoginForm(forms.Form):
-
-    username = forms.CharField(label='Имя пользователя', max_length=20)
-    password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
+class LoginForm(AuthenticationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['username'].label = 'Имя пользователя'
+        self.fields['password'].label = 'Пароль'
         self.helper = FormHelper()
-        self.helper.layout = Layout(
-            Field('username', css_class='form-control'),
-            Field('password', css_class='form-control', rows=3),
-            Submit('submit', 'Ввод', css_class='btn btn-primary')
-        )
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Ввод', css_class='btn btn-primary'))
 

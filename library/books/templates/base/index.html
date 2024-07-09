@@ -1,6 +1,6 @@
 <nav>
   <div>
-  <ul class="nav nav-pills">
+  <ul class="nav nav-pills flex-column flex-sm-row" >
       <li class="nav-item">
         <a class="nav-link {% if request.path == '/' %} active {% endif %}" href="{% url 'books:book_list' %}" >Главная</a>
       </li>
@@ -30,7 +30,7 @@
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="{% url 'users:user_update' %}">Личный кабинет</a></li>
                     <li><a class="dropdown-item" href="{% url 'users:favorite_list' %}">Избранное</a></li>
-                    <li><a class="dropdown-item" href="#">Написать нам</a></li>
+
                 </ul>
             </div>
             <a href="{% url 'users:logout' %}" class="btn btn-outline-primary">Выйти</a>
