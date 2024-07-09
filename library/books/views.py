@@ -79,6 +79,10 @@ class BookDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         book = self.get_object()
         context['reviews'] = Review.objects.filter(book=book)
+        is_authenticated = self.request.user.is_authenticated
+        context['is_authenticated'] = is_authenticated
+        if is_authenticated:
+            context['favorite_list'] = Favorite.objects.filter(user=self.request.user).values_list('book_id', flat=True)
         return context
 
 

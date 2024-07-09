@@ -5,14 +5,27 @@
 {% block content %}
     <h1>{{ book.title }}</h1>
     {% if book.cover_image %}
-    <img src="{{ book.cover_image.url }}" class="img-fluid shadow-lg mb-3 bg-body-tertiary rounded detail">
+    <div class="info">
+        <img src="{{ book.cover_image.url }}" class="img-fluid shadow-lg mb-3 bg-body-tertiary rounded detail">
+        {% if is_authenticated %}
+            {% if book.id in favorite_list %}
+            <a href="{% url 'users:favorite_add' book.id %}" class="btn btn-outline-primary mb-2">Удалить из избранного</a>
+            {% else %}
+            <a href="{% url 'users:favorite_add' book.id %}" class="btn btn-outline-primary mb-2">В избранное</a>
+            {% endif %}
+        {% endif %}
+        <a href="{% url 'books:book_list' %}" class="btn btn-secondary mb-1">Обратно к списку</a>
+    </div>
     {% else %}
     <p>No cover image available.</p>
     {% endif %}
+    <div class="book-info">
         <p><strong>Автор:</strong> <a href="{% url 'books:author_detail' book.author.id %}">{{ book.author }}</a></p>
         <p><strong>Жанр:</strong> <a href="{% url 'books:genre_detail' book.genre.id %}">{{ book.genre }}</a></p>
         <p><strong>Год создания:</strong> {{ book.year_published }}</p>
         <p><strong>Описание:</strong> {{ book.description }}</p>
+
+
 
     <h4>Отзывы</h4>
     {% if request.user.is_authenticated %}
@@ -39,6 +52,7 @@
     {% else %}
         <p>На эту книгу пока что нет отзывов.</p>
     {% endif %}
+    </div>
 
-    <a href="{% url 'books:book_list' %}" class="btn btn-secondary mb-1">Обратно к списку</a>
+
 {% endblock %}

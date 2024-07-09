@@ -16,9 +16,21 @@ main {
 
 .detail {
     max-width:200px;
+
 }
 
+.info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    float: left;
+    margin-right: 10px;
+    max-width: 200px;
+}
 
+.info > a {
+    width: 100%;
+}
 
 .nav {
     position: fixed;

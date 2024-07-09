@@ -4,16 +4,20 @@
 
 {% block content %}
     <h1>{{ author.name }}</h1>
+    <div class="info">
     {% if author.cover_image %}
     <img src="{{ author.cover_image.url }}" class="img-fluid shadow-lg mb-3 bg-body-tertiary rounded detail">
     {% else %}
     <p>Нет доступного изображения</p>
+
     {% endif %}
+    <a href="{% url 'books:author_list' %}" class="btn btn-secondary mb-1">Обратно к списку</a>
+    </div>
         <p><strong>Биография: </strong> {{ author.bio }}</p>
         <strong>Книги: </strong>
-        <ul>
+        <ul class="list-group">
             {% for book in author.books.all %}
-            <li>
+            <li class="list-group-item">
                 <a href="{% url 'books:book_detail' book.id %}">{{ book.title }}</a>
             </li>
             {% endfor %}
@@ -21,5 +25,5 @@
 
 
 
-    <a href="{% url 'books:author_list' %}" class="btn btn-secondary mb-1">Обратно к списку</a>
+
 {% endblock %}
